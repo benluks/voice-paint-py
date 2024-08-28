@@ -1,0 +1,19 @@
+{
+    "audio": {
+        "format": "paFloat32",
+        "channels": 1,
+        "rate": 44100,
+        "frames_per_buffer": 128
+    },
+    "processor": {
+        "process_frame_ms": 20
+    },
+    "canvas": {
+        "width": 800,
+        "height": 600,
+        "background_color": [255, 255, 255]
+    },
+    "ui": {
+        "window_title": "Voice Paint"
+    }
+}
