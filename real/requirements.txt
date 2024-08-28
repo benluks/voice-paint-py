@@ -1,0 +1,14 @@
+"""
+
+requirements.txt
+Summary:
+
+Lists all the dependencies and Python packages required for the project. This file is used to set up the environment with the necessary packages.
+Key Classes/Functions:
+
+None (it's a configuration file).
+Design Patterns:
+
+Not applicable (configuration management).
+
+"""

@@ -1,0 +1,10 @@
+bindings.cpp
+setup.py
+analysis.egg-info/PKG-INFO
+analysis.egg-info/SOURCES.txt
+analysis.egg-info/dependency_links.txt
+analysis.egg-info/top_level.txt
+fft/realfft.cpp
+fft/wisdom.cpp
+pitch/mpm.cpp
+util/parabolic_interpolation.cpp
