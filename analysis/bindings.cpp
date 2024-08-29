@@ -2,7 +2,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h> // For handling NumPy arrays
 
-#include "pitch/pitch.h"
+#include "analysis.h"
 
 namespace py = pybind11;
 

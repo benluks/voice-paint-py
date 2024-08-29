@@ -3,6 +3,7 @@
 
 #include "pitch/pitch.h"
 #include "linpred/linpred.h"
+#include "formant/formant.h"
 #include "fft/fft.h"
 #include "util/util.h"
 

@@ -2,6 +2,7 @@
 #define ANALYSIS_UTIL_H
 
 #include <vector>
+#include "../formant/formant.h"
 
 #include <complex>
 
@@ -15,9 +16,9 @@ namespace Analysis {
     
     std::vector<std::complex<double>> findRoots(const std::vector<double>& p);
 
-    // FormantData calculateFormant(double r, double phi, double sampleRate);
+    FormantData calculateFormant(double r, double phi, double sampleRate);
 
-    // void sortFormants(std::vector<FormantData>& formants);
+    void sortFormants(std::vector<FormantData>& formants);
 
     void polishComplexRoot(const std::vector<double>& p, std::complex<double> *root, int maxIt);
     void polishRealRoot(const std::vector<double>& p, double *root, int maxIt);
