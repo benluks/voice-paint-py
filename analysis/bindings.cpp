@@ -1,6 +1,7 @@
-// bindings.cpp
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h> // For handling NumPy arrays
+#include <memory>
+#include <vector>
 
 #include "analysis.h"
 
@@ -23,7 +24,7 @@ PYBIND11_MODULE(analysis, m)
     py::class_<Analysis::Pitch::MPM, Analysis::PitchSolver, std::shared_ptr<Analysis::Pitch::MPM>>(m, "MPM")
         .def(py::init<>()) // Default constructor
         .def("solve", [](Analysis::Pitch::MPM &self, py::array_t<double> data, int sample_rate)
-            {
+             {
             // Convert NumPy array to a C++ pointer and size
             py::buffer_info buf = data.request();
             if (buf.ndim != 1) {
@@ -34,6 +35,24 @@ PYBIND11_MODULE(analysis, m)
             int length = static_cast<int>(buf.shape[0]);
 
             // Call the solve method
-            return self.solve(ptr, length, sample_rate);
-            }, "Solve the pitch", py::arg("data"), py::arg("sample_rate"));
+            return self.solve(ptr, length, sample_rate); }, "Compute pitch from raw audio signal", py::arg("data"), py::arg("sample_rate"));
+
+    // --------------------------------------------------
+
+    // formants and LP
+    // Expose FormantData structure
+    py::class_<Analysis::FormantData>(m, "FormantData")
+        .def_readonly("frequency", &Analysis::FormantData::frequency)
+        .def_readonly("bandwidth", &Analysis::FormantData::bandwidth);
+
+    // Expose FormantResult structure
+    py::class_<Analysis::FormantResult>(m, "FormantResult")
+        .def_readonly("formants", &Analysis::FormantResult::formants);
+
+    // Expose FormantSolver abstract class
+    py::class_<Analysis::FormantSolver, std::shared_ptr<Analysis::FormantSolver>>(m, "FormantSolver")
+        .def("solve", &Analysis::FormantSolver::solve); // Bind the pure virtual function
+
+    py::class_<Analysis::Formant::FilteredLP, Analysis::FormantSolver, std::shared_ptr<Analysis::Formant::FilteredLP>>(m, "FilteredLP")
+        .def(py::init<>());
 }

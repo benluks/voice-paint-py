@@ -81,8 +81,9 @@ class MainWindow(QWidget):
     def update_analysis(self, analysis):
         self.waveform_data = analysis['audio_data']
         
-        pitch_result = analysis['pitch_result']
         amplitude = analysis['amplitude']
+        pitch_result = analysis['pitch_result']
+        
 
         if pitch_result.voiced:
             smoothed_pitch = ema(pitch_result.pitch, self.pitch_track[-1])

@@ -1,43 +1,55 @@
 # setup.py
 from setuptools import setup, Extension
-from pybind11.setup_helpers import build_ext  # Import build_ext from pybind11's setup_helpers
+from pybind11.setup_helpers import (
+    build_ext,
+)  # Import build_ext from pybind11's setup_helpers
 import pybind11
 import numpy
 
 # Define the extension module
 ext_modules = [
     Extension(
-        'analysis',  # The name of the module
+        "analysis",  # The name of the module
         [
-            'bindings.cpp',
-            'pitch/mpm.cpp',
-            # 'fft/complexfft.cpp',
-            # 'fft/fft_n.cpp',
-            'fft/realfft.cpp',
-            # 'fft/realrealfft.cpp',
-            'fft/wisdom.cpp',
-            'util/parabolic_interpolation.cpp'
-            ],  # List all C++ source files
+            "bindings.cpp",
+            "fft/realfft.cpp",
+            "fft/wisdom.cpp",
+            "formant/filteredlp.cpp",
+            "linpred/burg.cpp",
+            "pitch/mpm.cpp",
+            "util/parabolic_interpolation.cpp",
+            "util/aberth.cpp",
+            "util/calc_formant.cpp",
+            "util/eval_polynomial.cpp",
+            "util/find_roots.cpp",
+            "util/gaussian_window.cpp",
+            "util/resampler.cpp",
+            "util/sort_formants.cpp",
+        ],  # List all C++ source files
         include_dirs=[
             pybind11.get_include(),  # Include pybind11 headers
-            numpy.get_include(),     # Include NumPy headers
-            './fft',                 # Path to fft headers
-            './pitch',               # Path to pitch headers
-            './util',                # Path to util headers
-             '/usr/local/include',    # Path to FFTW headers
+            numpy.get_include(),  # Include NumPy headers
+            "./fft",
+            "./formant",
+            "./linpred",
+            "./pitch",
+            "./util",
+            "/usr/local/include",
+            # "/usr/local/include/samplerate.h"
         ],
         library_dirs=[
-            '/usr/local/lib',        # Path to FFTW libraries
+            "/usr/local/lib",
+            # "/usr/local/lib/libsamplerate.dylib"
         ],
-        libraries=['fftw3'], 
-        language='c++',
-        extra_compile_args=['-std=c++11'],  # Ensure C++11 standard
+        libraries=["fftw3", "samplerate"],
+        language="c++",
+        extra_compile_args=["-std=c++17"],
     ),
 ]
 
 # Configure the setup
 setup(
-    name='analysis',
+    name="analysis",
     ext_modules=ext_modules,
-    cmdclass={'build_ext': build_ext},  # Use pybind11's build_ext
+    cmdclass={"build_ext": build_ext},  # Use pybind11's build_ext
 )
