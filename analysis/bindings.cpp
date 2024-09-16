@@ -38,7 +38,7 @@ PYBIND11_MODULE(analysis, m)
             return self.solve(ptr, length, sample_rate); }, "Compute pitch from raw audio signal", py::arg("data"), py::arg("sample_rate"));
 
     // --------------------------------------------------
-
+    
     // formants and LP
     // Expose FormantData structure
     py::class_<Analysis::FormantData>(m, "FormantData")
@@ -54,5 +54,18 @@ PYBIND11_MODULE(analysis, m)
         .def("solve", &Analysis::FormantSolver::solve); // Bind the pure virtual function
 
     py::class_<Analysis::Formant::FilteredLP, Analysis::FormantSolver, std::shared_ptr<Analysis::Formant::FilteredLP>>(m, "FilteredLP")
-        .def(py::init<>());
+        .def(py::init<>()) // Default constructor
+        .def("solve", [](Analysis::Formant::FilteredLP &self, py::array_t<double> data, int sample_rate)
+             {
+            py::buffer_info buf = data.request();
+            if (buf.ndim != 1)
+                throw std::runtime_error("Number of dimensions must be 1");
+
+            // convert to c++ vector
+            std::vector<double> vec_data(static_cast<double*>(buf.ptr), static_cast<double*>(buf.ptr) + buf.shape[0]);
+
+            // logic for processing
+
+
+            return data; }, "Compute the formant values from a raw waveform", py::arg("data"), py::arg("sample_rate"));
 }
