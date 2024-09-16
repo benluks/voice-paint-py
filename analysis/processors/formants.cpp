@@ -1,5 +1,4 @@
 #include "formants.h"
-#include "../analysis.h"
 
 using namespace Analysis::Processors;
 
@@ -8,7 +7,6 @@ Formants::Formants()
       mFormantSolver(std::make_shared<Analysis::Formant::FilteredLP>()),
       mLastSample(0.0)
 {
-    // Constructor body (if needed)
 }
 
 Analysis::FormantResult Formants::processData(const std::vector<double> &data, double sampleRate)

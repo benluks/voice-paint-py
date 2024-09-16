@@ -17,6 +17,7 @@ ext_modules = [
             "formant/filteredlp.cpp",
             "linpred/burg.cpp",
             "pitch/mpm.cpp",
+            "processors/formants.cpp",
             "util/parabolic_interpolation.cpp",
             "util/aberth.cpp",
             "util/calc_formant.cpp",
@@ -33,6 +34,7 @@ ext_modules = [
             "./formant",
             "./linpred",
             "./pitch",
+            "./processors",
             "./util",
             "/usr/local/include",
             # "/usr/local/include/samplerate.h"

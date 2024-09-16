@@ -1,10 +1,11 @@
-#ifndef PIPELINE_PROCESSOR_FORMANTS_H
-#define PIPELINE_PROCESSOR_FORMANTS_H
+#ifndef ANALYSIS_PROCESSOR_FORMANTS_H
+#define ANALYSIS_PROCESSOR_FORMANTS_H
 
 #include <memory>
 
 #include "../util/util.h" // for resampler
 #include "../formant/formant.h"
+#include "../linpred/linpred.h"
 
 namespace Analysis::Processors
 {

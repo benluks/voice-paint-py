@@ -1,5 +1,6 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/numpy.h> // For handling NumPy arrays
+#include <pybind11/stl.h>
 #include <memory>
 #include <vector>
 
@@ -37,9 +38,8 @@ PYBIND11_MODULE(analysis, m)
             // Call the solve method
             return self.solve(ptr, length, sample_rate); }, "Compute pitch from raw audio signal", py::arg("data"), py::arg("sample_rate"));
 
-    // --------------------------------------------------
-    
     // formants and LP
+
     // Expose FormantData structure
     py::class_<Analysis::FormantData>(m, "FormantData")
         .def_readonly("frequency", &Analysis::FormantData::frequency)
@@ -47,25 +47,24 @@ PYBIND11_MODULE(analysis, m)
 
     // Expose FormantResult structure
     py::class_<Analysis::FormantResult>(m, "FormantResult")
-        .def_readonly("formants", &Analysis::FormantResult::formants);
+        .def_property_readonly("formants", [](const Analysis::FormantResult &self)
+                               { return self.formants; });
 
-    // Expose FormantSolver abstract class
-    py::class_<Analysis::FormantSolver, std::shared_ptr<Analysis::FormantSolver>>(m, "FormantSolver")
-        .def("solve", &Analysis::FormantSolver::solve); // Bind the pure virtual function
-
-    py::class_<Analysis::Formant::FilteredLP, Analysis::FormantSolver, std::shared_ptr<Analysis::Formant::FilteredLP>>(m, "FilteredLP")
-        .def(py::init<>()) // Default constructor
-        .def("solve", [](Analysis::Formant::FilteredLP &self, py::array_t<double> data, int sample_rate)
+    // Expose the Formants processor class
+    py::class_<Analysis::Processors::Formants>(m, "Formants")
+        .def(py::init<>()) // Updated constructor
+        .def("processData", [](Analysis::Processors::Formants &self, py::array_t<double> data, double sampleRate)
              {
-            py::buffer_info buf = data.request();
-            if (buf.ndim != 1)
-                throw std::runtime_error("Number of dimensions must be 1");
+        // Convert NumPy array to a C++ vector
+        py::buffer_info buf = data.request();
+        if (buf.ndim != 1)
+        {
+            throw std::runtime_error("Input should be a 1D array.");
+        }
 
-            // convert to c++ vector
-            std::vector<double> vec_data(static_cast<double*>(buf.ptr), static_cast<double*>(buf.ptr) + buf.shape[0]);
+        const double *ptr = static_cast<double *>(buf.ptr);
+        std::vector<double> data_vec(ptr, ptr + buf.shape[0]);
 
-            // logic for processing
-
-
-            return data; }, "Compute the formant values from a raw waveform", py::arg("data"), py::arg("sample_rate"));
+        // Call the processData method and get the FormantResult
+        return self.processData(data_vec, sampleRate); }, "Process data to extract formants", py::arg("data"), py::arg("sampleRate"));
 }
